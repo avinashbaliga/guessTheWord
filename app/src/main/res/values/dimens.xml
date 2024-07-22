@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="guessWordSize">22sp</dimen>
+    <dimen name="guessTheWordTitleSize">20sp</dimen>
+    <dimen name="yourScoreTitle">15sp</dimen>
+    <dimen name="scoreCardMargin">10dp</dimen>
+    <dimen name="scoreCard">18sp</dimen>
+    <dimen name="buttonMargin">20dp</dimen>
+</resources>
