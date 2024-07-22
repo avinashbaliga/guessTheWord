@@ -1,36 +1,50 @@
 package com.avinash.guesstheword.viewModels
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class GameViewModel : ViewModel() {
 
     private var words: MutableList<String> = mutableListOf("Happy", "Sad", "Dance", "Walk", "Run")
-    private var totalPoints: Int = 0
-    private var currentWord: String? = null
+    val totalPoints = MutableLiveData<Int>()
+    val currentWord = MutableLiveData<String>()
     private var randomNumber: Int = 0
 
-    fun setNewWord(): String {
-        randomNumber = getRandomNumber()
-        if (randomNumber >= 0) {
-            currentWord = words[getRandomNumber()];
-            words.remove(currentWord)
-        } else currentWord = ""
-        return currentWord ?: ""
+    init {
+        totalPoints.value = 0
+        setNewWord()
     }
 
-    fun updatePoint(addPoint: Boolean): Int {
-        return if (addPoint)
-            ++totalPoints
-        else --totalPoints
+    private fun setNewWord() {
+        randomNumber = getRandomNumber()
+        if (randomNumber >= 0) {
+            currentWord.value = words[getRandomNumber()];
+            words.remove(currentWord.value)
+        } else currentWord.value = ""
+    }
+
+    fun incrementPoint() {
+        setNewWord()
+        if (currentWord.value != "")
+            updatePoint(true)
+    }
+
+    fun decrementPoint() {
+        updatePoint(false)
+        setNewWord()
+    }
+
+    private fun updatePoint(addPoint: Boolean): Int {
+        if (addPoint)
+            totalPoints.value = totalPoints.value?.plus(1)
+        else totalPoints.value = totalPoints.value?.minus(1)
+
+        return totalPoints.value ?: 0
     }
 
     private fun getRandomNumber(): Int {
-        if (words.isNotEmpty())
-            return (0 until words.size).random()
-        else return -1
+        return if (words.isNotEmpty())
+            (0 until words.size).random()
+        else -1
     }
-
-    fun getCurrentPoint() = totalPoints
-
-    fun getCurrentWord() = currentWord ?: setNewWord()
 }
